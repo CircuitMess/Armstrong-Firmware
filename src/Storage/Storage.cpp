@@ -48,6 +48,8 @@ void Storage::readProgs(){
 		f.read((uint8_t*) &saved[i], 1);
 		f.read((uint8_t*) &slots[i], 4);
 	}
+	f.read((uint8_t*) &speed, 2);
+	speed = constrain(speed, SpeedMin, SpeedMax);
 	f.close();
 }
 
@@ -57,5 +59,17 @@ void Storage::writeProgs(){
 		f.write(saved[i]);
 		f.write((uint8_t*) &slots[i], sizeof(Slot));
 	}
+	f.write((uint8_t*) &speed, 2);
 	f.close();
+}
+
+void Storage::setSpeed(uint16_t speed){
+	if(this->speed == constrain(speed, SpeedMin, SpeedMax)) return;
+
+	this->speed = constrain(speed, SpeedMin, SpeedMax);
+	writeProgs();
+}
+
+uint16_t Storage::getSpeed() const{
+	return speed;
 }

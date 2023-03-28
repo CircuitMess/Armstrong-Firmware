@@ -1,14 +1,16 @@
 #include "RecordState.h"
 #include <Armstrong.h>
 #include "../Storage/Storage.h"
+#include "PlaybackState.h"
 
 RecordState::RecordState() : input(Armstrong.getInput()){}
 
 void RecordState::onStart(){
+	LED.clearAll();
 	for(int i = 0; i < 4; ++i){
 		LED.set(i, storage.isSaved(i));
 	}
-	LED.set(4, false); //PP LED is off in record
+	LED.set(LED_PP, false); //PP LED is off in record
 
 	input->addListener(this);
 	for(const auto& btn: { BTN_1, BTN_2, BTN_3, BTN_4, BTN_PP }){
@@ -40,22 +42,20 @@ void RecordState::buttonReleased(uint i){
 	for(int j = 0; j < 4; ++j){
 		Servo.setPos(j, slot.servoData[j]);
 	}
-	Serial.println("loaded");
 }
 
 void RecordState::buttonHeld(uint i){
 	if(i == BTN_PP){
-		//TODO - switch state to Playback
+		stop();
+		(new PlaybackState())->start();
 	}else{
 		auto index = buttonToIndex(i);
 		if(storage.isSaved(index)){
 			storage.clearSlot(index);
 			LED.set(index, false);
-			Serial.println("cleared");
 		}else{
 			storage.setSlot(index, { Servo.getPos(0), Servo.getPos(1), Servo.getPos(2), Servo.getPos(3) });
 			LED.set(index, true);
-			Serial.println("stored");
 		}
 	}
 }

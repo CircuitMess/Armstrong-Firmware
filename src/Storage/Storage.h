@@ -17,6 +17,9 @@ public:
 	void clearSlot(uint8_t index);
 	void clearAll();
 
+	void setSpeed(uint16_t speed);
+	[[nodiscard]] uint16_t getSpeed() const;
+
 private:
 	void readProgs();
 	void writeProgs();
@@ -24,6 +27,11 @@ private:
 	Slot slots[4] = {};
 	bool saved[4] = { false };
 	static constexpr const char* path = "/Slots.bin";
+
+	static constexpr uint16_t SpeedMin = 500;
+	static constexpr uint16_t SpeedMax = 2000;
+	static constexpr uint16_t SpeedDefault = 1000;
+	uint16_t speed = SpeedDefault;
 };
 
 extern Storage storage;
