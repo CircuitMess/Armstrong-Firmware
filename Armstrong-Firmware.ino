@@ -6,6 +6,7 @@
 #include "src/State/RecordState.h"
 #include "src/State/I2CState.h"
 #include "src/Storage/Storage.h"
+#include "src/ColorService.h"
 
 bool checkWheelsonConnected(){
 	int sum = 0;
@@ -24,6 +25,8 @@ void setup(){
 	}
 
 	storage.begin();
+
+	new ColorService;
 
 	if(checkWheelsonConnected()){
 		(new I2CState())->start();
