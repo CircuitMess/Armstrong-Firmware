@@ -4,7 +4,16 @@
 #include <SPIFFS.h>
 #include <Loop/LoopManager.h>
 #include "src/State/RecordState.h"
+#include "src/State/I2CState.h"
 #include "src/Storage/Storage.h"
+
+bool checkWheelsonConnected(){
+	int sum = 0;
+	for(int i = 0; i < 5; i++){
+		sum += analogRead(35);
+	}
+	return (sum / 5.0) > 900;
+}
 
 void setup(){
 	Serial.begin(115200);
@@ -16,7 +25,12 @@ void setup(){
 
 	storage.begin();
 
-	(new RecordState())->start();
+	if(checkWheelsonConnected()){
+		(new I2CState())->start();
+
+	}else{
+		(new RecordState())->start();
+	}
 }
 
 void loop(){
