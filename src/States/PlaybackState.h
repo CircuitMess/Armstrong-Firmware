@@ -20,7 +20,7 @@ private:
 	void positionCurrent();
 
 	int32_t stepTime = 1000000; // [us]
-	static constexpr uint32_t MinStepTime = 200000;
+	static constexpr uint32_t MinStepTime = 500000;
 	static constexpr uint32_t MaxStepTime = 2000000;
 	static constexpr uint32_t StepTimeStep = 50000;
 
