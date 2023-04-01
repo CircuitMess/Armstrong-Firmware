@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(Armstrong-Firmware)
-set(PORT /dev/ttyUSB0)
+set(PORT /dev/ttyUSB1)
 set(DEVICE cm:esp32:armstrong)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -20,33 +20,34 @@ else()
     set(ArduinoLibs ~/Arduino/libraries)
 endif()
 
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/cores/esp32)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/esp32)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/freertos)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/spi_flash)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/nvs_flash)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/log)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/heap)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/driver)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/tools/sdk/include/driver/driver)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/cores/esp32)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/esp32)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/freertos)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/spi_flash)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/nvs_flash)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/log)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/heap)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/driver)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/tools/sdk/include/driver/driver)
 
 # Include directories
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/Wire/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/FS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/SD/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/SPI/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/WiFi/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/SPIFFS/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/LovyanGFX/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/Update/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/Chatter-Library/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/lvgl/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/glm)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/I2C_BM8563/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/AsyncUDP/src)
-include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.1/libraries/AsyncTCP/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/Wire/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/FS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/SD/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/SPI/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/WiFi/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/SPIFFS/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/LovyanGFX/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/Update/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/Chatter-Library/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/lvgl/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/glm)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/I2C_BM8563/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/AsyncUDP/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/AsyncTCP/src)
+include_directories(${Arduino15}/packages/cm/hardware/esp32/1.6.2/libraries/CircuitOS/src)
 
 
 include_directories(${ArduinoLibs}/CircuitOS/src)
@@ -69,7 +70,7 @@ add_definitions(-DESP32)
 SET_SOURCE_FILES_PROPERTIES(${CMAKE_PROJECT_NAME}.ino PROPERTIES LANGUAGE CXX)
 
 add_custom_command(OUTPUT ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf
-        COMMAND arduino-cli compile --fqbn ${DEVICE} --output-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_PROJECT_NAME}.ino
+        COMMAND arduino-cli --config-file ~/.arduino15 compile --fqbn ${DEVICE} --output-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY} ${CMAKE_PROJECT_NAME}.ino
         DEPENDS ${CMAKE_PROJECT_NAME}.ino ${SOURCES}
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 
@@ -77,7 +78,7 @@ add_custom_target(CMBuild
         SOURCES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.ino.elf)
 
 add_custom_target(CMUpload ALL
-        COMMAND arduino-cli upload --fqbn ${DEVICE} -p ${PORT} --input-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        COMMAND arduino-cli --config-file ~/.arduino15 upload --fqbn ${DEVICE} -p ${PORT} --input-dir ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
         DEPENDS CMBuild
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 

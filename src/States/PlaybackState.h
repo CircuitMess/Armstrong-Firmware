@@ -3,29 +3,37 @@
 
 #include <Input/InputListener.h>
 #include <EncoderInput.h>
-#include "State.h"
+#include "../State.h"
+#include "../SlotStorage.h"
 #include <Loop/LoopListener.h>
 
 class PlaybackState : public State, private InputListener, private EncoderListener, private LoopListener {
-public:
-	PlaybackState();
-
 protected:
 	void onStart() override;
 	void onStop() override;
 
 private:
-	void encoderMove(uint8_t enc, int8_t amount) override;
+	void encoderMove(Motor enc, int8_t amount) override;
 	void buttonPressed(uint i) override;
 	void loop(uint micros) override;
 
-	Input* input;
+	void positionCurrent();
+
+	int32_t stepTime = 1000000; // [us]
+	static constexpr uint32_t MinStepTime = 200000;
+	static constexpr uint32_t MaxStepTime = 2000000;
+	static constexpr uint32_t StepTimeStep = 50000;
 
 	uint32_t stepTimer = 0;
 	uint8_t currentStep = 0;
-	uint8_t savedSteps = 0;
 
-	static constexpr uint8_t RotationMultiplier = 4;
+	struct Step {
+		Slot slot;
+		ServoPositions motors;
+	};
+
+	std::vector<Step> steps;
+
 };
 
 

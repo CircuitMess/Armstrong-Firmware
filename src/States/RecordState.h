@@ -3,26 +3,27 @@
 
 #include <Input/InputListener.h>
 #include <EncoderInput.h>
-#include "State.h"
+#include "../State.h"
 
 class RecordState : public State, private InputListener, private EncoderListener {
 public:
 	RecordState();
+
 protected:
 	void onStart() override;
 	void onStop() override;
 
 private:
-	void buttonReleased(uint i) override;
-	void buttonHeld(uint i) override;
-	void encoderMove(uint8_t enc, int8_t amount) override;
+	void buttonPressed(uint btn) override;
+	void buttonReleased(uint btn) override;
+	void buttonHeld(uint btn) override;
+	bool slotHold[4] = {false};
 
-	Input* input;
+	void encoderMove(Motor enc, int8_t amount) override;
 
 	static constexpr uint32_t HoldMillis = 850;
-	static constexpr uint8_t RotationMultiplier = 2;
+	static constexpr uint8_t RotationMultiplier = 5;
 
-	uint8_t buttonToIndex(uint8_t btn) const;
 };
 
 
