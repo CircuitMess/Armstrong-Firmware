@@ -31,6 +31,10 @@ void RecordState::onStop(){
 }
 
 void RecordState::encoderMove(Motor enc, int8_t amount){
+	if(enc == Motor::Rotate || enc == Motor::Pinch){
+		amount *= -1;
+	}
+
 	int val = Motors.getPos(enc);
 	val = constrain(val + amount * RotationMultiplier, 0, 255);
 	Motors.setPos(enc, val);
