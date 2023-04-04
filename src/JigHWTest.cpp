@@ -107,11 +107,10 @@ void JigHWTest::start(){
 void JigHWTest::AudioVisualTest(){
 	ledcSetup(0, 1000, 8);
 	ledcWrite(0, 255);
-	ledcAttachPin(LED_G, 0);
+	ledcAttachPin(LED_R, 0);
 
 	while(true){
 		float val = (127.5 * sin(((2 * PI) / (1000.0)) * millis())) + 127.5;
-		Serial.println(val);
 		ledcWrite(0, val);
 
 		if(millis() - flashTimer >= FlashTime){
