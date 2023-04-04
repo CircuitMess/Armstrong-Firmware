@@ -2,7 +2,7 @@
 #define ARMSTRONG_FIRMWARE_I2CSTATE_H
 
 #include <Loop/LoopListener.h>
-#include "State.h"
+#include "../State.h"
 
 class I2CState : public State, private LoopListener {
 protected:

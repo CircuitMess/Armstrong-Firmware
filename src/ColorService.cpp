@@ -11,5 +11,5 @@ ColorService::~ColorService(){
 }
 
 void ColorService::loop(uint micros){
-	RGB.set(Sensor.getPixel());
+	RGB.set(Sensor.getColor());
 }

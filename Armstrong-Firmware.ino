@@ -1,20 +1,23 @@
 #include <Arduino.h>
-#include <CircuitOS.h>
 #include <Armstrong.h>
-#include <SPIFFS.h>
+#include <CircuitOS.h>
 #include <Loop/LoopManager.h>
-#include "src/State/RecordState.h"
-#include "src/State/I2CState.h"
-#include "src/Storage/Storage.h"
+
 #include "src/ColorService.h"
+#include "src/SlotStorage.h"
+#include "src/State.h"
 #include "src/JigHWTest.h"
 
-bool checkWheelsonConnected(){
-	int sum = 0;
-	for(int i = 0; i < 5; i++){
-		sum += analogRead(35);
+
+bool checkWheelson(){
+	uint32_t sum = 0;
+	const int count = 15;
+
+	for(int i = 0; i < count; i++){
+		sum += analogRead(PIN_WHEELSON);
 	}
-	return (sum / 5.0) > 900;
+
+	return (sum / count) > 800;
 }
 
 bool checkJig(){
@@ -47,7 +50,6 @@ bool checkJig(){
 void setup(){
 	Serial.begin(115200);
 
-
 	if(checkJig()){
 		printf("Jig\n");
 		auto test = new JigHWTest();
@@ -56,20 +58,14 @@ void setup(){
 	}
 
 	Armstrong.begin();
-	if(!SPIFFS.begin()){
-		Serial.println("SPIFFS begin error");
-		return;
-	}
-
-	storage.begin();
 
 	new ColorService;
 
-	if(checkWheelsonConnected()){
-		(new I2CState())->start();
-
+	if(checkWheelson()){
+		State::enterI2C();
 	}else{
-		(new RecordState())->start();
+		Storage.load();
+		State::enterRecord();
 	}
 }
 

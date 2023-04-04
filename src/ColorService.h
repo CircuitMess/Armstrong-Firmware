@@ -7,8 +7,10 @@ class ColorService : private LoopListener {
 public:
 	ColorService();
 	~ColorService() override;
+
 private:
 	void loop(uint micros) override;
+
 };
 
 

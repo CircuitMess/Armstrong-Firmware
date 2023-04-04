@@ -39,12 +39,23 @@ void I2CState::loop(uint micros){
 	}
 
 	if(data[0] == ReadByte){
-		auto val = Servo.getPos(data[1]);
-		int ret = i2c_slave_write_buffer(I2C_NUM_1, &val, 1, portMAX_DELAY);
+		uint8_t motor = data[1];
+		uint8_t pos = 0;
+
+		if(motor < 4){
+			pos = Motors.getPos((Motor) motor);
+		}
+
+		int ret = i2c_slave_write_buffer(I2C_NUM_1, &pos, 1, portMAX_DELAY);
 		if(ret != 1){
 			ESP_LOGW(tag, "I2C Write error, couldn't send Servo position\n");
 		}
 	}else{
-		Servo.setPos(data[0], data[1]);
+		uint8_t motor = data[0];
+		uint8_t pos = data[1];
+
+		if(motor < 4){
+			Motors.setPos((Motor) motor, pos);
+		}
 	}
 }
